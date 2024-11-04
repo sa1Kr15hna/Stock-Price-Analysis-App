@@ -5,7 +5,7 @@ st.set_page_config(
 )
 
 st.title("Welcome to my Stonks App")
-st.warning('Not very mobile firendly :/')
+
 st.image("stonks.jpg", width=500)
 
 st.sidebar.success("Click on a page.")
