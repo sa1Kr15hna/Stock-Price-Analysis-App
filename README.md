@@ -63,3 +63,8 @@ Work in-prgress!!! Stay tuned!!!
 
 ![Coming Soon](images/Predictions.png)
 
+## Final Thoughts
+
+
+The Streamlit web app is currently not very mobile-friendly. I welcome any feedback on bugs and suggestions for improvement. Additionally, I am interested in exploring techniques for predicting stock prices, as I aim to develop a model that can train directly within the app and potentially perform hyperparameter tuning.
+
