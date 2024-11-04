@@ -2,3 +2,4 @@ yfinance
 bs4
 plotly
 statsmodels
+ta
