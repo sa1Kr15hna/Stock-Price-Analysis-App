@@ -1,2 +1,3 @@
 yfinance
 bs4
+plotly
