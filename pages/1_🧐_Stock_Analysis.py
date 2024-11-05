@@ -269,23 +269,30 @@ else:
                 indicator_df["RSI"] = ta.momentum.rsi(
                     indicator_df["Adj Close"], window=14
                 )
-                indicator_df= indicator_df.dropna()
+                indicator_df = indicator_df.dropna()
                 features = st.multiselect(
                     "Select Indicators",
-                    ["Adj Close", "Close", "Open", "High", "Low","SMA_20",
+                    [
+                        "Adj Close",
+                        "Close",
+                        "Open",
+                        "High",
+                        "Low",
+                        "SMA_20",
                         "SMA_50",
                         "EMA_20",
                         "EMA_50",
                         "Bollinger_High",
-                        "Bollinger_Low"],
+                        "Bollinger_Low",
+                    ],
                     default="Adj Close",
                 )
-                
+
                 fig = sp.make_subplots(
                     rows=3,
                     cols=1,
                     shared_xaxes=True,
-                    row_heights=[0.5, 0.25,0.25],
+                    row_heights=[0.5, 0.25, 0.25],
                     vertical_spacing=0.05,
                 )
 
@@ -296,33 +303,41 @@ else:
                             y=indicator_df[feature],
                             mode="lines",
                             name=feature,
-                        ),row=1,col=1
+                        ),
+                        row=1,
+                        col=1,
                     )
                 fig.add_trace(
-                        go.Scatter(
-                            x=indicator_df.index,
-                            y=indicator_df['RSI'],
-                            mode="lines",
-                            name='RSI',
-                        ),row=2,col=1
-                    )
+                    go.Scatter(
+                        x=indicator_df.index,
+                        y=indicator_df["RSI"],
+                        mode="lines",
+                        name="RSI",
+                    ),
+                    row=2,
+                    col=1,
+                )
                 fig.add_trace(
-                        go.Scatter(
-                            x=indicator_df.index,
-                            y=indicator_df["MACD"],
-                            mode="lines",
-                            name='MACD',
-                        ),row=3,col=1
-                    )
+                    go.Scatter(
+                        x=indicator_df.index,
+                        y=indicator_df["MACD"],
+                        mode="lines",
+                        name="MACD",
+                    ),
+                    row=3,
+                    col=1,
+                )
                 fig.add_trace(
-                        go.Scatter(
-                            x=indicator_df.index,
-                            y=indicator_df["MACD_Signal"],
-                            mode="lines",
-                            line_dash="dot",
-                            name="MACD Signal",
-                        ),row=3,col=1
-                    )
+                    go.Scatter(
+                        x=indicator_df.index,
+                        y=indicator_df["MACD_Signal"],
+                        mode="lines",
+                        line_dash="dot",
+                        name="MACD Signal",
+                    ),
+                    row=3,
+                    col=1,
+                )
                 fig.add_hline(
                     y=70,
                     line_dash="dot",
@@ -341,7 +356,7 @@ else:
                     title=f"{name} Stock Price Analysis",
                     template="plotly_dark",
                     plot_bgcolor="rgba(16, 19, 87, 1)",
-                    height = 700
+                    height=700,
                 )
                 fig.update_yaxes(title_text="Indicators", row=1, col=1)
                 fig.update_yaxes(title_text="RSI", row=2, col=1)
