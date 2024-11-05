@@ -351,6 +351,7 @@ else:
                 fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
                 plot = st.container(border=True)
                 plot.plotly_chart(fig)
-
+        else:
+            st.warning("The ticker didn't return any data.")
     except Exception as e:
         st.error(f"Error fetching data: {e}")

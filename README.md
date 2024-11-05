@@ -44,7 +44,7 @@ On this page, we display the latest recorded **Closing Price**, **High**, **Low*
 
 Here, we're breaking down the time series into its key components: **trend**, **seasonal**, and **residual**. You can choose between **Additive** or **Multiplicative** decomposition, and watch as each component is plotted to reveal underlying patterns in the data.
 
-![Decomposition](images/Decomposition.png)
+![Decomposition](images/decomposition.png)
 
 ### 3. Indicators:
 Welcome to the Indicators page! Here, you can select and overlay multiple features—including **Adjusted Close**, **Close**, **Open**, **High**, **Low**, and multiple indicators—**SMA20**, **SMA50**, **EMA20**, **EMA50**, and **Bollinger Bands**—all on a single plot. This setup allows you to visually analyze various trends and signals in the stock's performance for deeper insights.
@@ -61,7 +61,7 @@ The Popular Stocks page! Choose from categories like **Most Active**, **Trending
 
 Work in-prgress!!! Stay tuned!!!
 
-![Coming Soon](images/Predictions.png)
+![Coming Soon](images/predictions.png)
 
 ## Final Thoughts
 
