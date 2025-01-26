@@ -27,6 +27,7 @@ endDate = st.sidebar.date_input(
 @st.cache_data
 def getData(ticker):
     data = yf.download(ticker, period="max")
+    data.columns = data.columns.droplevel('Ticker')
     return data
 
 
@@ -36,7 +37,6 @@ else:
     try:
         totalData = getData(ticker)
         if not totalData.empty:
-            totalData.columns = totalData.columns.droplevel("Ticker")
             data = totalData[
                 (totalData.index.date >= startDate) & (totalData.index.date <= endDate)
             ]
