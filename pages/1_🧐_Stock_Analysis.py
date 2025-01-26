@@ -46,8 +46,8 @@ else:
                 ["Candle Stick Plot", "Decomposition", "Indicators"]
             )
             with tab1:
-                adjcloseprice = totalData["Adj Close"].iloc[-1]
-                prevadjcloseprice = totalData["Adj Close"].iloc[-2]
+                adjcloseprice = totalData["Close"].iloc[-1]
+                prevadjcloseprice = totalData["Close"].iloc[-2]
                 change = adjcloseprice - prevadjcloseprice
                 pctchange = (change / prevadjcloseprice) * 100
 
@@ -169,7 +169,7 @@ else:
                         options=["Additive", "Multiplicative"],
                     )
                     # dataclose = data['Close'].asfreq('D').ffill()
-                    dataclose = data["Adj Close"]
+                    dataclose = data["Close"]
                     decomposition = seasonal_decompose(
                         dataclose, model=ModelType[model_type], period=30
                     )
@@ -239,15 +239,15 @@ else:
                 # Calculate technical indicators
                 # Simple Moving Average (SMA)
                 indicator_df["SMA_20"] = ta.trend.sma_indicator(
-                    indicator_df["Adj Close"], window=20
+                    indicator_df["Close"], window=20
                 )
                 indicator_df["SMA_50"] = ta.trend.sma_indicator(
-                    indicator_df["Adj Close"], window=50
+                    indicator_df["Close"], window=50
                 )
 
                 # Exponential Moving Average (EMA)
                 indicator_df["EMA_20"] = ta.trend.ema_indicator(
-                    indicator_df["Adj Close"], window=20
+                    indicator_df["Close"], window=20
                 )
                 indicator_df["EMA_50"] = ta.trend.ema_indicator(
                     indicator_df["Close"], window=50
@@ -255,25 +255,25 @@ else:
 
                 # Bollinger Bands
                 bollinger = ta.volatility.BollingerBands(
-                    indicator_df["Adj Close"], window=20, window_dev=2
+                    indicator_df["Close"], window=20, window_dev=2
                 )
                 indicator_df["Bollinger_High"] = bollinger.bollinger_hband()
                 indicator_df["Bollinger_Low"] = bollinger.bollinger_lband()
 
                 # Moving Average Convergence Divergence (MACD)
-                macd = ta.trend.MACD(indicator_df["Adj Close"])
+                macd = ta.trend.MACD(indicator_df["Close"])
                 indicator_df["MACD"] = macd.macd()
                 indicator_df["MACD_Signal"] = macd.macd_signal()
 
                 # Relative Strength Index (RSI)
                 indicator_df["RSI"] = ta.momentum.rsi(
-                    indicator_df["Adj Close"], window=14
+                    indicator_df["Close"], window=14
                 )
                 indicator_df = indicator_df.dropna()
                 features = st.multiselect(
                     "Select Indicators",
                     [
-                        "Adj Close",
+                        "Close",
                         "Close",
                         "Open",
                         "High",
@@ -285,7 +285,7 @@ else:
                         "Bollinger_High",
                         "Bollinger_Low",
                     ],
-                    default="Adj Close",
+                    default="Close",
                 )
 
                 fig = sp.make_subplots(
