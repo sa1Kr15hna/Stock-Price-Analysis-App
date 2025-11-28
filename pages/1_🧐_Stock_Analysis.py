@@ -64,12 +64,12 @@ else:
                 with col2:
                     tile = col2.container(border=True, height=125)
                     tile.metric(
-                        label="High", value=f'{totalData['High'].iloc[-1]:.2f} USD'
+                        label="High", value=f"{totalData['High'].iloc[-1]:.2f} USD"
                     )
                 with col3:
                     tile = col3.container(border=True, height=125)
                     tile.metric(
-                        label="Low", value=f'{totalData['Low'].iloc[-1]:.2f} USD'
+                        label="Low", value=f"{totalData['Low'].iloc[-1]:.2f} USD"
                     )
                 with col4:
                     tile = col4.container(border=True, height=125)
