@@ -367,6 +367,8 @@ else:
                 plot = st.container(border=True)
                 plot.plotly_chart(fig)
         else:
-            st.warning("The ticker didn't return any data.")
+            st.warning("The ticker didn't return any data because of rate limits.")
+            st.warning("Try again after a while.")
     except Exception as e:
         st.error(f"Error fetching data: {e}")
+
