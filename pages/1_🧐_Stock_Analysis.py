@@ -234,141 +234,147 @@ else:
 
             with tab3:
                 st.subheader(f"{name} Stock Data Indicators")
-                indicator_df = data.copy()
-                indicator_df = indicator_df.drop("Volume", axis=1)
-                # Calculate technical indicators
-                # Simple Moving Average (SMA)
-                indicator_df["SMA_20"] = ta.trend.sma_indicator(
-                    indicator_df["Close"], window=20
-                )
-                indicator_df["SMA_50"] = ta.trend.sma_indicator(
-                    indicator_df["Close"], window=50
-                )
+                if len(data) < 50:
+                    st.warning(f"Indicators require at least 50 days of data to calculate moving averages accurately. Your date range has {len(data)} observations. Please select a wider date range.")
+                    st.stop()
+                else:
+                    indicator_df = data.copy()
+                    indicator_df = indicator_df.drop("Volume", axis=1)
+                    # Calculate technical indicators
+                    # Simple Moving Average (SMA)
+                    indicator_df["SMA_20"] = ta.trend.sma_indicator(
+                        indicator_df["Close"], window=20
+                    )
+                    indicator_df["SMA_50"] = ta.trend.sma_indicator(
+                        indicator_df["Close"], window=50
+                    )
 
-                # Exponential Moving Average (EMA)
-                indicator_df["EMA_20"] = ta.trend.ema_indicator(
-                    indicator_df["Close"], window=20
-                )
-                indicator_df["EMA_50"] = ta.trend.ema_indicator(
-                    indicator_df["Close"], window=50
-                )
+                    # Exponential Moving Average (EMA)
+                    indicator_df["EMA_20"] = ta.trend.ema_indicator(
+                        indicator_df["Close"], window=20
+                    )
+                    indicator_df["EMA_50"] = ta.trend.ema_indicator(
+                        indicator_df["Close"], window=50
+                    )
 
-                # Bollinger Bands
-                bollinger = ta.volatility.BollingerBands(
-                    indicator_df["Close"], window=20, window_dev=2
-                )
-                indicator_df["Bollinger_High"] = bollinger.bollinger_hband()
-                indicator_df["Bollinger_Low"] = bollinger.bollinger_lband()
+                    # Bollinger Bands
+                    bollinger = ta.volatility.BollingerBands(
+                        indicator_df["Close"], window=20, window_dev=2
+                    )
+                    indicator_df["Bollinger_High"] = bollinger.bollinger_hband()
+                    indicator_df["Bollinger_Low"] = bollinger.bollinger_lband()
 
-                # Moving Average Convergence Divergence (MACD)
-                macd = ta.trend.MACD(indicator_df["Close"])
-                indicator_df["MACD"] = macd.macd()
-                indicator_df["MACD_Signal"] = macd.macd_signal()
+                    # Moving Average Convergence Divergence (MACD)
+                    macd = ta.trend.MACD(indicator_df["Close"])
+                    indicator_df["MACD"] = macd.macd()
+                    indicator_df["MACD_Signal"] = macd.macd_signal()
 
-                # Relative Strength Index (RSI)
-                indicator_df["RSI"] = ta.momentum.rsi(
-                    indicator_df["Close"], window=14
-                )
-                indicator_df = indicator_df.dropna()
-                features = st.multiselect(
-                    "Select Indicators",
-                    [
-                        "Close",
-                        "Close",
-                        "Open",
-                        "High",
-                        "Low",
-                        "SMA_20",
-                        "SMA_50",
-                        "EMA_20",
-                        "EMA_50",
-                        "Bollinger_High",
-                        "Bollinger_Low",
-                    ],
-                    default="Close",
-                )
+                    # Relative Strength Index (RSI)
+                    indicator_df["RSI"] = ta.momentum.rsi(
+                        indicator_df["Close"], window=14
+                    )
+                    indicator_df = indicator_df.dropna()
+                    features = st.multiselect(
+                        "Select Indicators",
+                        [
+                            "Close",
+                            "Close",
+                            "Open",
+                            "High",
+                            "Low",
+                            "SMA_20",
+                            "SMA_50",
+                            "EMA_20",
+                            "EMA_50",
+                            "Bollinger_High",
+                            "Bollinger_Low",
+                        ],
+                        default="Close",
+                    )
 
-                fig = sp.make_subplots(
-                    rows=3,
-                    cols=1,
-                    shared_xaxes=True,
-                    row_heights=[0.5, 0.25, 0.25],
-                    vertical_spacing=0.05,
-                )
+                    fig = sp.make_subplots(
+                        rows=3,
+                        cols=1,
+                        shared_xaxes=True,
+                        row_heights=[0.5, 0.25, 0.25],
+                        vertical_spacing=0.05,
+                    )
 
-                for feature in features:
+                    for feature in features:
+                        fig.add_trace(
+                            go.Scatter(
+                                x=indicator_df.index,
+                                y=indicator_df[feature],
+                                mode="lines",
+                                name=feature,
+                            ),
+                            row=1,
+                            col=1,
+                        )
                     fig.add_trace(
                         go.Scatter(
                             x=indicator_df.index,
-                            y=indicator_df[feature],
+                            y=indicator_df["RSI"],
                             mode="lines",
-                            name=feature,
+                            name="RSI",
                         ),
-                        row=1,
+                        row=2,
                         col=1,
                     )
-                fig.add_trace(
-                    go.Scatter(
-                        x=indicator_df.index,
-                        y=indicator_df["RSI"],
-                        mode="lines",
-                        name="RSI",
-                    ),
-                    row=2,
-                    col=1,
-                )
-                fig.add_trace(
-                    go.Scatter(
-                        x=indicator_df.index,
-                        y=indicator_df["MACD"],
-                        mode="lines",
-                        name="MACD",
-                    ),
-                    row=3,
-                    col=1,
-                )
-                fig.add_trace(
-                    go.Scatter(
-                        x=indicator_df.index,
-                        y=indicator_df["MACD_Signal"],
-                        mode="lines",
+                    fig.add_trace(
+                        go.Scatter(
+                            x=indicator_df.index,
+                            y=indicator_df["MACD"],
+                            mode="lines",
+                            name="MACD",
+                        ),
+                        row=3,
+                        col=1,
+                    )
+                    fig.add_trace(
+                        go.Scatter(
+                            x=indicator_df.index,
+                            y=indicator_df["MACD_Signal"],
+                            mode="lines",
+                            line_dash="dot",
+                            name="MACD Signal",
+                        ),
+                        row=3,
+                        col=1,
+                    )
+                    fig.add_hline(
+                        y=70,
                         line_dash="dot",
-                        name="MACD Signal",
-                    ),
-                    row=3,
-                    col=1,
-                )
-                fig.add_hline(
-                    y=70,
-                    line_dash="dot",
-                    line_color="green",
-                    row=2,
-                    col=1,
-                )
-                fig.add_hline(
-                    y=30,
-                    line_dash="dot",
-                    line_color="red",
-                    row=2,
-                    col=1,
-                )
-                fig.update_layout(
-                    title=f"{name} Stock Price Analysis",
-                    template="plotly_dark",
-                    plot_bgcolor="rgba(16, 19, 87, 1)",
-                    height=700,
-                )
-                fig.update_yaxes(title_text="Indicators", row=1, col=1)
-                fig.update_yaxes(title_text="RSI", row=2, col=1)
-                fig.update_yaxes(title_text="MACD", row=3, col=1)
-                fig.update_xaxes(title_text="Date", row=3, col=1)
-                fig.update_yaxes(showgrid=False)
-                fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
-                plot = st.container(border=True)
-                plot.plotly_chart(fig)
+                        line_color="green",
+                        row=2,
+                        col=1,
+                    )
+                    fig.add_hline(
+                        y=30,
+                        line_dash="dot",
+                        line_color="red",
+                        row=2,
+                        col=1,
+                    )
+                    fig.update_layout(
+                        title=f"{name} Stock Price Analysis",
+                        template="plotly_dark",
+                        plot_bgcolor="rgba(16, 19, 87, 1)",
+                        height=700,
+                    )
+                    fig.update_yaxes(title_text="Indicators", row=1, col=1)
+                    fig.update_yaxes(title_text="RSI", row=2, col=1)
+                    fig.update_yaxes(title_text="MACD", row=3, col=1)
+                    fig.update_xaxes(title_text="Date", row=3, col=1)
+                    fig.update_yaxes(showgrid=False)
+                    fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
+                    plot = st.container(border=True)
+                    plot.plotly_chart(fig)
         else:
-            st.warning("The ticker didn't return any data because of rate limits.")
-            st.warning("Try again after a while.")
+            if yf.Ticker(ticker).info.get("regularMarketPrice", None) is None:
+                st.warning("No data found for the given ticker. Please check if the ticker symbol is correct.")
+            else:
+                 st.warning("The ticker didn't return any data because of rate limits or the selected date range. Try expanding the date range or try again later.")
     except Exception as e:
         st.error(f"Error fetching data: {e}")
 

@@ -15,9 +15,21 @@ urls = {
 
 
 def getTable(category):
-    response = requests.get(urls[category])
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    response = requests.get(urls[category], headers=headers)
+    if response.status_code != 200:
+        st.error(f"Failed to fetch data: HTTP {response.status_code}")
+        return pd.DataFrame(columns=["ticker", "name", "price", "change", "pctchange"])
+        
     soup = BeautifulSoup(response.text, "html.parser")
     table = soup.find("table")
+    
+    if table is None:
+        st.error("Structure of Yahoo Finance has changed. Could not find data table.")
+        return pd.DataFrame(columns=["ticker", "name", "price", "change", "pctchange"])
+        
     headers = [header.text.strip() for header in table.find_all("th")]
     data = []
     for row in table.find_all("tr")[1:]:
